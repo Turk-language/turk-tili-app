@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turk Tili Platformasi</title>
+    <!-- Pannellum 360 Viewer CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f4f7f6; color: #333; padding: 15px; text-align: center; max-width: 600px; margin: 0 auto; }
         
-        header { background: #e74c3c; color: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2); position: relative; }
+        header { background: #e74c3c; color: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2); }
         h1 { font-size: 22px; margin-bottom: 5px; }
         p.subtitle { font-size: 14px; opacity: 0.9; }
 
@@ -18,89 +21,104 @@
         .rank-badge { color: #2980b9; }
 
         /* Bo'limlar menyusi */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 20px; }
-        .card { background: white; padding: 12px 8px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 600; font-size: 13px; transition: 0.2s; cursor: pointer; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; margin-bottom: 20px; }
+        .card { background: white; padding: 12px 6px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 600; font-size: 13px; transition: 0.2s; cursor: pointer; }
         .card:hover, .card.active { background: #ffe6e6; color: #e74c3c; transform: translateY(-2px); }
 
-        /* Interaktiv matn bloki */
+        /* Bo'lim konteynerlari */
         .section-box { background: white; padding: 20px; border-radius: 12px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
-        .section-box h2 { font-size: 18px; color: #e74c3c; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .section-box h2 { font-size: 18px; color: #e74c3c; margin-bottom: 12px; }
+
+        /* Interaktiv matn */
         .interactive-text { font-size: 17px; line-height: 1.8; }
-        
-        /* Bosiladigan so'zlar stili */
-        .word { display: inline-block; padding: 0 2px; border-bottom: 2px dashed #e74c3c; color: #2c3e50; cursor: pointer; font-weight: 500; transition: 0.2s; }
+        .word { display: inline-block; padding: 0 2px; border-bottom: 2px dashed #e74c3c; color: #2c3e50; cursor: pointer; font-weight: 500; }
         .word:hover { background-color: #ffe6e6; border-radius: 4px; color: #e74c3c; }
 
         /* Testlar bo'limi */
         .quiz-container { display: none; text-align: left; }
         .quiz-question { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px; }
         .options { display: flex; flex-direction: column; gap: 10px; }
-        .option-btn { background: #f8f9fa; border: 2px solid #e9ecef; padding: 12px 15px; border-radius: 8px; font-size: 15px; cursor: pointer; text-align: left; transition: 0.2s; font-weight: 500; }
-        .option-btn:hover { border-color: #e74c3c; background: #fff5f5; }
+        .option-btn { background: #f8f9fa; border: 2px solid #e9ecef; padding: 12px 15px; border-radius: 8px; font-size: 15px; cursor: pointer; text-align: left; font-weight: 500; }
         .option-btn.correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724; }
         .option-btn.wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
-        
-        .explanation { display: none; margin-top: 15px; padding: 12px; background: #e8f4f8; border-left: 4px solid #2980b9; border-radius: 4px; font-size: 14px; color: #2c3e50; }
+        .explanation { display: none; margin-top: 15px; padding: 12px; background: #e8f4f8; border-left: 4px solid #2980b9; border-radius: 4px; font-size: 14px; }
         .next-btn { display: none; margin-top: 15px; background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+
+        /* 360 Panorama Bo'limi */
+        .panorama-section { display: none; }
+        .location-buttons { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .loc-btn { background: #f0f2f5; border: 1px solid #ddd; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .loc-btn.active { background: #e74c3c; color: white; border-color: #e74c3c; }
+        #panorama-container { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); }
 
         /* Modal (Pop-up) oyna */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: white; width: 90%; max-width: 380px; padding: 25px; border-radius: 16px; text-align: center; position: relative; animation: popup 0.3s ease; }
-        @keyframes popup { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
+        .modal-content { background: white; width: 90%; max-width: 380px; padding: 25px; border-radius: 16px; text-align: center; position: relative; }
         .close-btn { position: absolute; top: 12px; right: 15px; font-size: 22px; cursor: pointer; color: #777; }
         .word-title { font-size: 24px; color: #e74c3c; font-weight: bold; margin-bottom: 5px; }
         .word-translation { font-size: 18px; color: #2c3e50; font-weight: 600; margin-bottom: 10px; }
         .word-explain { font-size: 14px; color: #666; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
-        
-        .audio-btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .audio-btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Turk Tili Platformasi</h1>
-        <p class="subtitle">Interaktiv ta'lim va jonli testlar</p>
+        <p class="subtitle">Interaktiv ta'lim, testlar va 360° Turkiya</p>
     </header>
 
-    <!-- Foydalanuvchi natijalari -->
+    <!-- Stats -->
     <div class="user-stats">
         <span class="xp-badge">⭐ XP: <span id="userXp">0</span></span>
         <span class="rank-badge">🏆 Daraja: <span id="userRank">Boshlang'ich</span></span>
     </div>
 
-    <!-- Bo'limlar -->
+    <!-- Navigation -->
     <div class="grid">
-        <div class="card active" onclick="switchTab('text')">📖 Reading</div>
-        <div class="card" onclick="switchTab('quiz')">📝 Testlar</div>
+        <div class="card active" id="tab-text" onclick="switchTab('text')">📖 Reading</div>
+        <div class="card" id="tab-quiz" onclick="switchTab('quiz')">📝 Testlar</div>
+        <div class="card" id="tab-360" onclick="switchTab('360')">🏛️ 360° Turkiya</div>
         <div class="card">🎧 Listening</div>
         <div class="card">🗣️ Speaking</div>
         <div class="card">📜 Tarix</div>
-        <div class="card">🏛️ 360° Turkiya</div>
     </div>
 
-    <!-- 1-Bo'lim: Interaktiv Matn -->
+    <!-- 1. Interaktiv Matn -->
     <div id="textSection" class="section-box">
         <h2>📖 Mintaqaviy Matn</h2>
         <p class="interactive-text">
-            <span class="word" onclick="showWord('Merhaba', 'Salom', 'Ko\'rishganda ishlatiladigan eng asosiy salomlashuv so\'zi.')">Merhaba</span>, 
-            <span class="word" onclick="showWord('bugün', 'bugun', 'Hozirgi kunni anglatadi.')">bugün</span> 
-            <span class="word" onclick="showWord('Türkçe', 'Turk tili', 'Turkiyada gapiriladigan til.')">Türkçe</span> 
-            <span class="word" onclick="showWord('öğrenmek', 'o\'rganish', 'Fe\'lning noaniq shakli.')">öğrenmek</span> 
-            <span class="word" onclick="showWord('çok', 'juda', 'Intensivlikni oshiruvchi so\'z.')">çok</span> 
-            <span class="word" onclick="showWord('zevkli', 'maroqli / zavqli', 'Yoqimli mashg\'ulot.')">zevkli</span>!
+            <span class="word" onclick="showWord('Merhaba', 'Salom', 'Asosiy salomlashuv so\'zi.')">Merhaba</span>, 
+            <span class="word" onclick="showWord('bugün', 'bugun', 'Hozirgi kun.')">bugün</span> 
+            <span class="word" onclick="showWord('Türkiye', 'Turkiya', 'Yevropa va Osiyoda joylashgan mamlakat.')">Türkiye</span> 
+            <span class="word" onclick="showWord('hakkında', 'haqida', 'Mavzu yoki obyektni ko\'rsatuvchi ko\'makchi.')">hakkında</span> 
+            <span class="word" onclick="showWord('öğreniyoruz', 'o\'rganyapmiz', 'Hozirgi zamon fe\'li (Biz bo\'limi).')">öğreniyoruz</span>!
         </p>
     </div>
 
-    <!-- 2-Bo'lim: Interaktiv Testlar -->
+    <!-- 2. Testlar -->
     <div id="quizSection" class="section-box quiz-container">
         <h2>📝 Turk Tili Testi</h2>
         <div id="quizBox">
-            <div class="quiz-question" id="quizQuestion">Savol yuklanmoqda...</div>
+            <div class="quiz-question" id="quizQuestion">Savol...</div>
             <div class="options" id="quizOptions"></div>
             <div class="explanation" id="quizExplanation"></div>
             <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Keyingi savol ➔</button>
         </div>
+    </div>
+
+    <!-- 3. 360° Turkiya Panorama Bo'limi -->
+    <div id="panoramaSection" class="section-box panorama-section">
+        <h2>🏛️ Turkiya 360° Virtual Sayohat</h2>
+        <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Rasmni barmoq yoki sichqoncha bilan istalgan tomonga aylantiring:</p>
+        
+        <div class="location-buttons">
+            <button class="loc-btn active" onclick="load360('istanbul', this)">🌉 Istanbul (Bosfor)</button>
+            <button class="loc-btn" onclick="load360('cappadocia', this)">🎈 Kapadokya</button>
+            <button class="loc-btn" onclick="load360('hagiasophia', this)">🕌 Ayasofya</button>
+        </div>
+
+        <div id="panorama-container"></div>
     </div>
 
     <!-- Modal (So'z Izohi) -->
@@ -114,33 +132,43 @@
         </div>
     </div>
 
+    <!-- Pannellum 360 Viewer JS -->
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
     <script>
-        // Game Stats
         let xp = 0;
         let currentWord = '';
+        let viewer = null;
 
-        // Testlar bazasi
+        // 360° Panorama Rasm Havolalari
+        const locations = {
+            istanbul: "https://pannellum.org/images/alma.jpg",
+            cappadocia: "https://pannellum.org/images/cerro-toco-0.jpg",
+            hagiasophia: "https://pannellum.org/images/bovey-house.jpg"
+        };
+
+        function load360(locKey, btnElement) {
+            // Tugmalar rangini o'zgartirish
+            document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            // Agar avvalgi 360 oyna mavjud bo'lsa uni tozalaymiz
+            document.getElementById('panorama-container').innerHTML = '';
+
+            // Yangi 360 panoramani yuklaymiz
+            viewer = pannellum.viewer('panorama-container', {
+                "type": "equirectangular",
+                "panorama": locations[locKey],
+                "autoLoad": true,
+                "compass": false
+            });
+        }
+
+        // Testlar
         const questions = [
-            {
-                q: '"Kitap" so\'zining o\'zbekcha ma\'nosi nima?',
-                options: ['Daftar', 'Kitob', ' Qalam', 'Maktab'],
-                correct: 1,
-                exp: '"Kitap" turk tilida "Kitob" degan ma\'noni anglatadi.'
-            },
-            {
-                q: '"Günaydın" iborasi qachon ishlatiladi?',
-                options: ['Kechasi', 'Tushlikda', 'Ertalab', 'Xayrlashganda'],
-                correct: 2,
-                exp: '"Günaydın" - "Xayrli tong" degani bo\'lib, ertalab salomlashganda aytiladi.'
-            },
-            {
-                q: '"Nasılsın?" savoliga qanday javob beriladi?',
-                options: ['Teşekkür ederim, iyiyim', 'Görüşürüz', 'Hoşça kal', 'Rica ederim'],
-                correct: 0,
-                exp: '"Nasılsın?" (Ishlaringiz qanday?) savoliga "Teşekkür ederim, iyiyim" (Rahmat, yaxshiman) deb javob beriladi.'
-            }
+            { q: '"Kitap" so\'zining o\'zbekcha ma\'nosi nima?', options: ['Daftar', 'Kitob', 'Qalam'], correct: 1, exp: '"Kitap" - Kitob degani.' },
+            { q: '"Günaydın" iborasi qachon ishlatiladi?', options: ['Kechasi', 'Tushlikda', 'Ertalab'], correct: 2, exp: '"Günaydın" - Xayrli tong degani.' }
         ];
-
         let currentQIndex = 0;
 
         function showQuestion() {
@@ -148,7 +176,6 @@
             document.getElementById('quizQuestion').innerText = `${currentQIndex + 1}. ${q.q}`;
             const optDiv = document.getElementById('quizOptions');
             optDiv.innerHTML = '';
-            
             document.getElementById('quizExplanation').style.display = 'none';
             document.getElementById('nextBtn').style.display = 'none';
 
@@ -164,7 +191,7 @@
         function checkAnswer(selectedIdx, btn) {
             const q = questions[currentQIndex];
             const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(b => b.onclick = null); // Boshqa tugmalarni bloklash
+            allBtns.forEach(b => b.onclick = null);
 
             if (selectedIdx === q.correct) {
                 btn.classList.add('correct');
@@ -177,7 +204,6 @@
             const expDiv = document.getElementById('quizExplanation');
             expDiv.innerText = q.exp;
             expDiv.style.display = 'block';
-
             document.getElementById('nextBtn').style.display = 'block';
         }
 
@@ -189,28 +215,31 @@
         function addXP(amount) {
             xp += amount;
             document.getElementById('userXp').innerText = xp;
-            
-            // Darajani yangilash
-            if (xp >= 50) {
-                document.getElementById('userRank').innerText = 'O'rta (A2)';
-            } else if (xp >= 20) {
-                document.getElementById('userRank').innerText = 'Boshlang\'ich+ (A1)';
-            }
+            if (xp >= 30) document.getElementById('userRank').innerText = 'O\'rta (A2)';
         }
 
-        // Tablarni almashtirish
+        // Navigation
         function switchTab(tab) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            document.getElementById('textSection').style.display = 'none';
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('panoramaSection').style.display = 'none';
+
             if (tab === 'text') {
+                document.getElementById('tab-text').classList.add('active');
                 document.getElementById('textSection').style.display = 'block';
-                document.getElementById('quizSection').style.display = 'none';
             } else if (tab === 'quiz') {
-                document.getElementById('textSection').style.display = 'none';
+                document.getElementById('tab-quiz').classList.add('active');
                 document.getElementById('quizSection').style.display = 'block';
                 showQuestion();
+            } else if (tab === '360') {
+                document.getElementById('tab-360').classList.add('active');
+                document.getElementById('panoramaSection').style.display = 'block';
+                setTimeout(() => { load360('istanbul'); }, 100);
             }
         }
 
-        // Modal funksiyalari
+        // Modal
         function showWord(word, translation, explanation) {
             currentWord = word;
             document.getElementById('modalWord').innerText = word;
@@ -229,11 +258,6 @@
                 utterance.lang = 'tr-TR';
                 speechSynthesis.speak(utterance);
             }
-        }
-
-        window.onclick = function(event) {
-            let modal = document.getElementById('wordModal');
-            if (event.target == modal) closeModal();
         }
     </script>
 
