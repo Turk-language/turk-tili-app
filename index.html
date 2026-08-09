@@ -49,15 +49,19 @@
         .loc-btn.active { background: #e74c3c; color: white; border-color: #e74c3c; }
         .map-frame { width: 100%; height: 380px; border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* Speaking (Ovozli Talaffuz) Bo'limi */
-        .speaking-section { display: none; text-align: center; }
-        .speech-target { font-size: 22px; font-weight: bold; color: #e74c3c; margin: 15px 0 5px; }
-        .speech-translation { font-size: 15px; color: #666; margin-bottom: 20px; }
-        .mic-btn { background: #e74c3c; color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 28px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4); }
-        .mic-btn.recording { background: #27ae60; animation: pulse 1.5s infinite; }
+        /* --- AI CHATBOT (Speaking) STYLE --- */
+        .speaking-section { display: none; }
+        .chat-box { height: 320px; overflow-y: auto; background: #f9f9f9; border-radius: 10px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .chat-msg.ai { background: #ffffff; border: 1px solid #e0e0e0; align-self: flex-start; color: #2c3e50; border-bottom-left-radius: 2px; }
+        .chat-msg.user { background: #e74c3c; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        
+        .chat-controls { display: flex; gap: 10px; align-items: center; }
+        .chat-input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 25px; outline: none; font-size: 14px; }
+        .mic-chat-btn { background: #e74c3c; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .mic-chat-btn.recording { background: #27ae60; animation: pulse 1.2s infinite; }
+        .send-chat-btn { background: #2980b9; color: white; border: none; padding: 0 18px; height: 45px; border-radius: 25px; font-weight: bold; cursor: pointer; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .speech-result { margin-top: 20px; font-size: 16px; font-weight: 600; min-height: 24px; }
-        .speech-feedback { margin-top: 10px; font-size: 14px; font-weight: bold; }
 
         /* Modal (Pop-up) oyna */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
@@ -73,7 +77,7 @@
 
     <header>
         <h1>Turk Tili Platformasi</h1>
-        <p class="subtitle">Interaktiv ta'lim, testlar va 360° Turkiya</p>
+        <p class="subtitle">Interaktiv ta'lim, testlar va AI Muloqot</p>
     </header>
 
     <!-- Stats -->
@@ -87,7 +91,7 @@
         <div class="card active" id="tab-text" onclick="switchTab('text')">📖 Reading</div>
         <div class="card" id="tab-quiz" onclick="switchTab('quiz')">📝 Testlar</div>
         <div class="card" id="tab-360" onclick="switchTab('360')">🏛️ 360° Turkiya</div>
-        <div class="card" id="tab-speaking" onclick="switchTab('speaking')">🗣️ Speaking</div>
+        <div class="card" id="tab-speaking" onclick="switchTab('speaking')">🗣️ AI Speaking</div>
         <div class="card">🎧 Listening</div>
         <div class="card">📜 Tarix</div>
     </div>
@@ -131,20 +135,20 @@
         <iframe id="panoramaIframe" class="map-frame" src="https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469" allowfullscreen="" loading="lazy"></iframe>
     </div>
 
-    <!-- 4. Speaking (Talaffuz AI Tekshiruvi) -->
+    <!-- 4. AI Speaking (Muloqot Chatbot) -->
     <div id="speakingSection" class="section-box speaking-section">
-        <h2>🗣️ Talaffuzni Tekshirish</h2>
-        <p style="font-size: 13px; color: #666;">Quyidagi iborani ovoz chiqarib ayting va mikrofonga bosing:</p>
+        <h2>🗣️ AI bilan Turkcha Muloqot</h2>
+        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Mikrofonni bosib turkcha gapiring yoki matn yozing:</p>
         
-        <div class="speech-target" id="targetPhrase">Benim adım Ali</div>
-        <div class="speech-translation" id="targetTrans">(Mening ismim Ali)</div>
-        
-        <button class="mic-btn" id="micBtn" onclick="toggleSpeech()">🎙️</button>
-        
-        <div class="speech-result" id="speechResult">Tugmani bosib gapiring...</div>
-        <div class="speech-feedback" id="speechFeedback"></div>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-msg ai">🤖 <b>AI:</b> Merhaba! Ben senin Türkçe öğretmeninim. Bugün nasılsın?</div>
+        </div>
 
-        <button class="next-btn" id="nextSpeechBtn" style="display:none; margin-top:20px;" onclick="nextSpeechPhrase()">Keyingi ibora ➔</button>
+        <div class="chat-controls">
+            <button class="mic-chat-btn" id="micBtn" onclick="toggleSpeech()">🎙️</button>
+            <input type="text" id="userInput" class="chat-input" placeholder="Turkcha yozing yoki gapiring..." onkeypress="handleKeyPress(event)">
+            <button class="send-chat-btn" onclick="sendMessage()">Yubor</button>
+        </div>
     </div>
 
     <!-- Modal (So'z Izohi) -->
@@ -216,17 +220,9 @@
             showQuestion();
         }
 
-        // --- SPEAKING (Web Speech API AI) ---
-        const speechPhrases = [
-            { tr: "Benim adım Ali", uz: "Mening ismim Ali" },
-            { tr: "Nasılsınız?", uz: "Qalaysiz? / Ahvollaringiz qanday?" },
-            { tr: "Teşekkür ederim", uz: "Rahmat / Tashakkur etaman" },
-            { tr: "Görüşürüz", uz: "Ko'rishguncha" },
-            { tr: "Türkçe öğreniyorum", uz: "Turk tilini o'rganyapman" }
-        ];
-        let speechIndex = 0;
-        let isRecording = false;
+        // --- AI SPEAKING CHATBOT LOGIKA ---
         let recognition = null;
+        let isRecording = false;
 
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -236,68 +232,104 @@
             recognition.interimResults = false;
 
             recognition.onresult = function(event) {
-                const resultText = event.results[0][0].transcript;
-                document.getElementById('speechResult').innerText = `Siz aytdingiz: "${resultText}"`;
-                stopRecordingUI();
-                checkSpeechAccuracy(resultText);
+                const text = event.results[0][0].transcript;
+                document.getElementById('userInput').value = text;
+                stopMicUI();
+                sendMessage(); // Avtomatsiz yuboradi
             };
 
-            recognition.onerror = function() {
-                document.getElementById('speechResult').innerText = "Ovoz eshitilmadi yoki ruxsat berilmadi.";
-                stopRecordingUI();
-            };
-
-            recognition.onend = function() {
-                stopRecordingUI();
-            };
-        } else {
-            document.getElementById('speechResult').innerText = "Brauzeringiz ovoz tanishni qo'llab-quvvatlamaydi (Chrome ishlatib ko'ring).";
+            recognition.onerror = function() { stopMicUI(); };
+            recognition.onend = function() { stopMicUI(); };
         }
 
         function toggleSpeech() {
-            if (!recognition) return;
+            if (!recognition) {
+                alert("Brauzeringiz ovoz tanishni qo'llab-quvvatlamaydi. Chrome'dan foydalaning.");
+                return;
+            }
             if (!isRecording) {
                 recognition.start();
                 isRecording = true;
                 const micBtn = document.getElementById('micBtn');
                 micBtn.classList.add('recording');
                 micBtn.innerText = "🛑";
-                document.getElementById('speechResult').innerText = "Eshitilyapti... Gapiring!";
-                document.getElementById('speechFeedback').innerText = "";
             } else {
                 recognition.stop();
-                stopRecordingUI();
+                stopMicUI();
             }
         }
 
-        function stopRecordingUI() {
+        function stopMicUI() {
             isRecording = false;
             const micBtn = document.getElementById('micBtn');
             micBtn.classList.remove('recording');
             micBtn.innerText = "🎙️";
         }
 
-        function checkSpeechAccuracy(userSaid) {
-            const target = speechPhrases[speechIndex].tr.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-            const spoken = userSaid.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
 
-            const feedback = document.getElementById('speechFeedback');
-            if (spoken === target || spoken.includes(target)) {
-                feedback.innerHTML = "<span style='color: #27ae60;'>Ajoyib! Talaffuzingiz to'g'ri! 🎉 (+15 XP)</span>";
-                addXP(15);
-                document.getElementById('nextSpeechBtn').style.display = 'inline-block';
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            appendMessage('user', userText);
+            input.value = '';
+
+            // AI Javob qaytaradi va muloqot qiladi
+            setTimeout(() => {
+                const aiReply = getAiResponse(userText);
+                appendMessage('ai', `🤖 <b>AI:</b> ${aiReply}`);
+                speakText(aiReply);
+                addXP(5); // Muloqot qilgani uchun XP
+            }, 600);
+        }
+
+        function appendMessage(sender, text) {
+            const chatBox = document.getElementById('chatBox');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-msg ${sender}`;
+            msgDiv.innerHTML = text;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Oddiy muloqot AI mantiq qoidalari (A1-A2 darajada)
+        function getAiResponse(text) {
+            const lower = text.toLowerCase();
+            
+            if (lower.includes("merhaba") || lower.includes("selam")) {
+                return "Merhaba! Harika bir gün, değil mi?";
+            } else if (lower.includes("nasılsın") || lower.includes("iyi misin") || lower.includes("nasıl gidiyor")) {
+                return "Ben çok iyiyim, teşekkür ederim! Sen nasılsın?";
+            } else if (lower.includes("ben de iyiyim") || lower.includes("iyiyim")) {
+                return "Harika! Bugün Türkçe ne öğrenmek istersin?";
+            } else if (lower.includes("adın ne") || lower.includes("sen kimsin")) {
+                return "Benim adım Türkçe Asistanı. Sana Türkçe öğretmek için buradayım!";
+            } else if (lower.includes("teşekkür") || lower.includes("sağ ol")) {
+                return "Rica ederim! Her zaman yardımcı olmaya hazırım.";
+            } else if (lower.includes("hoşça kal") || lower.includes("görüşürüz")) {
+                return "Görüşmek üzere! Kendine çok iyi bak!";
             } else {
-                feedback.innerHTML = "<span style='color: #e74c3c;'>Biroz noaniq bo'ldi. Qaytadan urinib ko'ring! 🔄</span>";
+                const randomReplies = [
+                    "Çok güzel söyledin! Başka ne anlatmak istersin?",
+                    "Anladım! Türkçe konuşman her geçen gün gelişiyor.",
+                    "Harika bir cümle! Devam edelim mi?",
+                    "Çok mantıklı! Bugün neler yaptın?"
+                ];
+                return randomReplies[Math.floor(Math.random() * randomReplies.length)];
             }
         }
 
-        function nextSpeechPhrase() {
-            speechIndex = (speechIndex + 1) % speechPhrases.length;
-            document.getElementById('targetPhrase').innerText = speechPhrases[speechIndex].tr;
-            document.getElementById('targetTrans').innerText = `(${speechPhrases[speechIndex].uz})`;
-            document.getElementById('speechResult').innerText = "Tugmani bosib gapiring...";
-            document.getElementById('speechFeedback').innerText = "";
-            document.getElementById('nextSpeechBtn').style.display = 'none';
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                let utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'tr-TR';
+                utterance.rate = 0.9; // Biroz sekinroq, tushunarli o'qiydi
+                speechSynthesis.speak(utterance);
+            }
         }
 
         function addXP(amount) {
@@ -344,11 +376,7 @@
         }
 
         function speakWord() {
-            if ('speechSynthesis' in window) {
-                let utterance = new SpeechSynthesisUtterance(currentWord);
-                utterance.lang = 'tr-TR';
-                speechSynthesis.speak(utterance);
-            }
+            speakText(currentWord);
         }
     </script>
 
