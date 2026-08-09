@@ -47,8 +47,17 @@
         .location-buttons { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 8px; }
         .loc-btn { background: #f0f2f5; border: 1px solid #ddd; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .loc-btn.active { background: #e74c3c; color: white; border-color: #e74c3c; }
-        
         .map-frame { width: 100%; height: 380px; border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* Speaking (Ovozli Talaffuz) Bo'limi */
+        .speaking-section { display: none; text-align: center; }
+        .speech-target { font-size: 22px; font-weight: bold; color: #e74c3c; margin: 15px 0 5px; }
+        .speech-translation { font-size: 15px; color: #666; margin-bottom: 20px; }
+        .mic-btn { background: #e74c3c; color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 28px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4); }
+        .mic-btn.recording { background: #27ae60; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .speech-result { margin-top: 20px; font-size: 16px; font-weight: 600; min-height: 24px; }
+        .speech-feedback { margin-top: 10px; font-size: 14px; font-weight: bold; }
 
         /* Modal (Pop-up) oyna */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
@@ -78,8 +87,8 @@
         <div class="card active" id="tab-text" onclick="switchTab('text')">📖 Reading</div>
         <div class="card" id="tab-quiz" onclick="switchTab('quiz')">📝 Testlar</div>
         <div class="card" id="tab-360" onclick="switchTab('360')">🏛️ 360° Turkiya</div>
+        <div class="card" id="tab-speaking" onclick="switchTab('speaking')">🗣️ Speaking</div>
         <div class="card">🎧 Listening</div>
-        <div class="card">🗣️ Speaking</div>
         <div class="card">📜 Tarix</div>
     </div>
 
@@ -91,7 +100,7 @@
             <span class="word" onclick="showWord('bugün', 'bugun', 'Hozirgi kun.')">bugün</span> 
             <span class="word" onclick="showWord('Türkiye', 'Turkiya', 'Yevropa va Osiyoda joylashgan mamlakat.')">Türkiye</span> 
             <span class="word" onclick="showWord('hakkında', 'haqida', 'Mavzu yoki obyektni ko\'rsatuvchi ko\'makchi.')">hakkında</span> 
-            <span class="word" onclick="showWord('öğreniyoruz', 'o\'rganyapmiz', 'Hozirgi zamon fe\'li (Biz bo\'limi).')">öğreniyoruz</span>!
+            <span class="word" onclick="showWord('öğrenıyoruz', 'o\'rganyapmiz', 'Hozirgi zamon fe\'li (Biz bo\'limi).')">öğreniyoruz</span>!
         </p>
     </div>
 
@@ -106,7 +115,7 @@
         </div>
     </div>
 
-    <!-- 3. 360° Turkiya Panorama Bo'limi (Google Street View HD) -->
+    <!-- 3. 360° Turkiya Panorama Bo'limi -->
     <div id="panoramaSection" class="section-box panorama-section">
         <h2>🏛️ Turkiya 360° Virtual Sayohat</h2>
         <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Google Street View orqali mashhur joylarda aylanib tomosha qiling:</p>
@@ -120,6 +129,22 @@
         </div>
 
         <iframe id="panoramaIframe" class="map-frame" src="https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+    <!-- 4. Speaking (Talaffuz AI Tekshiruvi) -->
+    <div id="speakingSection" class="section-box speaking-section">
+        <h2>🗣️ Talaffuzni Tekshirish</h2>
+        <p style="font-size: 13px; color: #666;">Quyidagi iborani ovoz chiqarib ayting va mikrofonga bosing:</p>
+        
+        <div class="speech-target" id="targetPhrase">Benim adım Ali</div>
+        <div class="speech-translation" id="targetTrans">(Mening ismim Ali)</div>
+        
+        <button class="mic-btn" id="micBtn" onclick="toggleSpeech()">🎙️</button>
+        
+        <div class="speech-result" id="speechResult">Tugmani bosib gapiring...</div>
+        <div class="speech-feedback" id="speechFeedback"></div>
+
+        <button class="next-btn" id="nextSpeechBtn" style="display:none; margin-top:20px;" onclick="nextSpeechPhrase()">Keyingi ibora ➔</button>
     </div>
 
     <!-- Modal (So'z Izohi) -->
@@ -191,6 +216,90 @@
             showQuestion();
         }
 
+        // --- SPEAKING (Web Speech API AI) ---
+        const speechPhrases = [
+            { tr: "Benim adım Ali", uz: "Mening ismim Ali" },
+            { tr: "Nasılsınız?", uz: "Qalaysiz? / Ahvollaringiz qanday?" },
+            { tr: "Teşekkür ederim", uz: "Rahmat / Tashakkur etaman" },
+            { tr: "Görüşürüz", uz: "Ko'rishguncha" },
+            { tr: "Türkçe öğreniyorum", uz: "Turk tilini o'rganyapman" }
+        ];
+        let speechIndex = 0;
+        let isRecording = false;
+        let recognition = null;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onresult = function(event) {
+                const resultText = event.results[0][0].transcript;
+                document.getElementById('speechResult').innerText = `Siz aytdingiz: "${resultText}"`;
+                stopRecordingUI();
+                checkSpeechAccuracy(resultText);
+            };
+
+            recognition.onerror = function() {
+                document.getElementById('speechResult').innerText = "Ovoz eshitilmadi yoki ruxsat berilmadi.";
+                stopRecordingUI();
+            };
+
+            recognition.onend = function() {
+                stopRecordingUI();
+            };
+        } else {
+            document.getElementById('speechResult').innerText = "Brauzeringiz ovoz tanishni qo'llab-quvvatlamaydi (Chrome ishlatib ko'ring).";
+        }
+
+        function toggleSpeech() {
+            if (!recognition) return;
+            if (!isRecording) {
+                recognition.start();
+                isRecording = true;
+                const micBtn = document.getElementById('micBtn');
+                micBtn.classList.add('recording');
+                micBtn.innerText = "🛑";
+                document.getElementById('speechResult').innerText = "Eshitilyapti... Gapiring!";
+                document.getElementById('speechFeedback').innerText = "";
+            } else {
+                recognition.stop();
+                stopRecordingUI();
+            }
+        }
+
+        function stopRecordingUI() {
+            isRecording = false;
+            const micBtn = document.getElementById('micBtn');
+            micBtn.classList.remove('recording');
+            micBtn.innerText = "🎙️";
+        }
+
+        function checkSpeechAccuracy(userSaid) {
+            const target = speechPhrases[speechIndex].tr.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+            const spoken = userSaid.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+
+            const feedback = document.getElementById('speechFeedback');
+            if (spoken === target || spoken.includes(target)) {
+                feedback.innerHTML = "<span style='color: #27ae60;'>Ajoyib! Talaffuzingiz to'g'ri! 🎉 (+15 XP)</span>";
+                addXP(15);
+                document.getElementById('nextSpeechBtn').style.display = 'inline-block';
+            } else {
+                feedback.innerHTML = "<span style='color: #e74c3c;'>Biroz noaniq bo'ldi. Qaytadan urinib ko'ring! 🔄</span>";
+            }
+        }
+
+        function nextSpeechPhrase() {
+            speechIndex = (speechIndex + 1) % speechPhrases.length;
+            document.getElementById('targetPhrase').innerText = speechPhrases[speechIndex].tr;
+            document.getElementById('targetTrans').innerText = `(${speechPhrases[speechIndex].uz})`;
+            document.getElementById('speechResult').innerText = "Tugmani bosib gapiring...";
+            document.getElementById('speechFeedback').innerText = "";
+            document.getElementById('nextSpeechBtn').style.display = 'none';
+        }
+
         function addXP(amount) {
             xp += amount;
             document.getElementById('userXp').innerText = xp;
@@ -203,6 +312,7 @@
             document.getElementById('textSection').style.display = 'none';
             document.getElementById('quizSection').style.display = 'none';
             document.getElementById('panoramaSection').style.display = 'none';
+            document.getElementById('speakingSection').style.display = 'none';
 
             if (tab === 'text') {
                 document.getElementById('tab-text').classList.add('active');
@@ -214,6 +324,9 @@
             } else if (tab === '360') {
                 document.getElementById('tab-360').classList.add('active');
                 document.getElementById('panoramaSection').style.display = 'block';
+            } else if (tab === 'speaking') {
+                document.getElementById('tab-speaking').classList.add('active');
+                document.getElementById('speakingSection').style.display = 'block';
             }
         }
 
