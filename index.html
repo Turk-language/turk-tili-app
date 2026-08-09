@@ -48,7 +48,7 @@
         .loc-btn { background: #f0f2f5; border: 1px solid #ddd; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .loc-btn.active { background: #e74c3c; color: white; border-color: #e74c3c; }
         
-        .360-frame { width: 100%; height: 380px; border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .map-frame { width: 100%; height: 380px; border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         /* Modal (Pop-up) oyna */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
@@ -91,7 +91,7 @@
             <span class="word" onclick="showWord('bugün', 'bugun', 'Hozirgi kun.')">bugün</span> 
             <span class="word" onclick="showWord('Türkiye', 'Turkiya', 'Yevropa va Osiyoda joylashgan mamlakat.')">Türkiye</span> 
             <span class="word" onclick="showWord('hakkında', 'haqida', 'Mavzu yoki obyektni ko\'rsatuvchi ko\'makchi.')">hakkında</span> 
-            <span class="word" onclick="showWord('öğrenıyoruz', 'o\'rganyapmiz', 'Hozirgi zamon fe\'li (Biz bo\'limi).')">öğreniyoruz</span>!
+            <span class="word" onclick="showWord('öğreniyoruz', 'o\'rganyapmiz', 'Hozirgi zamon fe\'li (Biz bo\'limi).')">öğreniyoruz</span>!
         </p>
     </div>
 
@@ -106,23 +106,20 @@
         </div>
     </div>
 
-    <!-- 3. 360° Turkiya Panorama Bo'limi -->
+    <!-- 3. 360° Turkiya Panorama Bo'limi (Google Street View HD) -->
     <div id="panoramaSection" class="section-box panorama-section">
         <h2>🏛️ Turkiya 360° Virtual Sayohat</h2>
-        <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Chiroyli va mashhur joylarni tanlang va ekranni burib tomosha qiling:</p>
+        <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Google Street View orqali mashhur joylarda aylanib tomosha qiling:</p>
         
-        <!-- Mashhur joylar ro'yxati -->
         <div class="location-buttons">
-            <button class="loc-btn active" onclick="change360('https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=457', this)">🌉 Istanbul (Kız Kulesi)</button>
-            <button class="loc-btn" onclick="change360('https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=458', this)">🎈 Kapadokya (Shar turlari)</button>
-            <button class="loc-btn" onclick="change360('https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=459', this)">🕌 Ayasofya ibodatxonasi</button>
-            <button class="loc-btn" onclick="change360('https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=460', this)">🏔️ Pamukkale travertinlari</button>
-            <button class="loc-btn" onclick="change360('https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=461', this)">🗼 Galata Minorasi</button>
-            <button class="loc-btn" onclick="change360('https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=462', this)">🏖️ Antalya sohillari</button>
+            <button class="loc-btn active" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469', this)">🕌 Ayasofya (Ichki qismi)</button>
+            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE5uV3N2NENJdlZBSmxmMWpxRmxEclYwbHF5cjhGZFpBcm9GSEd4!2m2!1d38.643056!2d34.828889!3f210!4f10!5f0.7820865974627469', this)">🎈 Kapadokya (Havo Sharlari)</button>
+            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1RbnAweEpxWllqN3hIWWZtdnE4NEkyMGF2alhhcld5UmlqTjhP!2m2!1d41.025658!2d28.974155!3f120!4f0!5f0.7820865974627469', this)">🗼 Galata Minorasi</button>
+            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1ZbmVxSjlXdk1fTlY3RzlXZjM4Wms0aklsbjlHQm9SdWZJUnEx!2m2!1d37.913727!2d29.118712!3f45!4f0!5f0.7820865974627469', this)">🏔️ Pamukkale Travertinlari</button>
+            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1pX3NncW5oU1F0aG5YLUprX0hXWkJ1U1lOOW45RWpGZHZzYUtv!2m2!1d41.021111!2d29.004167!3f300!4f0!5f0.7820865974627469', this)">🌉 Istanbul (Kız Kulesi)</button>
         </div>
 
-        <!-- Interaktiv 360 Player -->
-        <iframe id="panoramaIframe" class="360-frame" src="https://renderstuff.com/tools/360-panorama-web-viewer-embed/?id=457" allowfullscreen></iframe>
+        <iframe id="panoramaIframe" class="map-frame" src="https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469" allowfullscreen="" loading="lazy"></iframe>
     </div>
 
     <!-- Modal (So'z Izohi) -->
