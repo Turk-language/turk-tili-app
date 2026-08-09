@@ -19,7 +19,7 @@
         .rank-badge { color: #2980b9; }
 
         /* Bo'limlar menyusi */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; margin-bottom: 20px; }
         .card { background: white; padding: 12px 6px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-weight: 600; font-size: 13px; transition: 0.2s; cursor: pointer; }
         .card:hover, .card.active { background: #ffe6e6; color: #e74c3c; transform: translateY(-2px); }
 
@@ -49,19 +49,31 @@
         .loc-btn.active { background: #e74c3c; color: white; border-color: #e74c3c; }
         .map-frame { width: 100%; height: 380px; border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* --- AI CHATBOT (Speaking) STYLE --- */
+        /* AI CHATBOT (Speaking) STYLE */
         .speaking-section { display: none; }
-        .chat-box { height: 320px; overflow-y: auto; background: #f9f9f9; border-radius: 10px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .chat-box { height: 300px; overflow-y: auto; background: #f9f9f9; border-radius: 10px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
         .chat-msg.ai { background: #ffffff; border: 1px solid #e0e0e0; align-self: flex-start; color: #2c3e50; border-bottom-left-radius: 2px; }
         .chat-msg.user { background: #e74c3c; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        
         .chat-controls { display: flex; gap: 10px; align-items: center; }
         .chat-input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 25px; outline: none; font-size: 14px; }
         .mic-chat-btn { background: #e74c3c; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .mic-chat-btn.recording { background: #27ae60; animation: pulse 1.2s infinite; }
         .send-chat-btn { background: #2980b9; color: white; border: none; padding: 0 18px; height: 45px; border-radius: 25px; font-weight: bold; cursor: pointer; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* LISTENING SECTION */
+        .listening-section { display: none; text-align: center; }
+        .audio-play-btn { background: #27ae60; color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 30px; cursor: pointer; margin: 15px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); transition: 0.2s; }
+        .audio-play-btn:hover { transform: scale(1.05); }
+        .listening-input-box { display: flex; gap: 10px; margin-top: 15px; }
+
+        /* TARIX VA MADANIYAT SECTION */
+        .history-section { display: none; }
+        .history-cards { display: flex; flex-direction: column; gap: 15px; }
+        .history-card { background: #fff8f8; border-left: 5px solid #e74c3c; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        .history-card h3 { font-size: 16px; color: #2c3e50; margin-bottom: 6px; }
+        .history-card p { font-size: 14px; color: #555; line-height: 1.5; }
+        .history-tag { display: inline-block; background: #e74c3c; color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; font-weight: bold; }
 
         /* Modal (Pop-up) oyna */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
@@ -71,6 +83,7 @@
         .word-translation { font-size: 18px; color: #2c3e50; font-weight: 600; margin-bottom: 10px; }
         .word-explain { font-size: 14px; color: #666; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
         .audio-btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -92,11 +105,11 @@
         <div class="card" id="tab-quiz" onclick="switchTab('quiz')">📝 Testlar</div>
         <div class="card" id="tab-360" onclick="switchTab('360')">🏛️ 360° Turkiya</div>
         <div class="card" id="tab-speaking" onclick="switchTab('speaking')">🗣️ AI Speaking</div>
-        <div class="card">🎧 Listening</div>
-        <div class="card">📜 Tarix</div>
+        <div class="card" id="tab-listening" onclick="switchTab('listening')">🎧 Listening</div>
+        <div class="card" id="tab-history" onclick="switchTab('history')">📜 Tarix</div>
     </div>
 
-    <!-- 1. Interaktiv Matn -->
+    <!-- 1. Interaktiv Matn (Reading) -->
     <div id="textSection" class="section-box">
         <h2>📖 Mintaqaviy Matn</h2>
         <p class="interactive-text">
@@ -125,11 +138,10 @@
         <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Google Street View orqali mashhur joylarda aylanib tomosha qiling:</p>
         
         <div class="location-buttons">
-            <button class="loc-btn active" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469', this)">🕌 Ayasofya (Ichki qismi)</button>
-            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE5uV3N2NENJdlZBSmxmMWpxRmxEclYwbHF5cjhGZFpBcm9GSEd4!2m2!1d38.643056!2d34.828889!3f210!4f10!5f0.7820865974627469', this)">🎈 Kapadokya (Havo Sharlari)</button>
+            <button class="loc-btn active" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469', this)">🕌 Ayasofya</button>
+            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE5uV3N2NENJdlZBSmxmMWpxRmxEclYwbHF5cjhGZFpBcm9GSEd4!2m2!1d38.643056!2d34.828889!3f210!4f10!5f0.7820865974627469', this)">🎈 Kapadokya</button>
             <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1RbnAweEpxWllqN3hIWWZtdnE4NEkyMGF2alhhcld5UmlqTjhP!2m2!1d41.025658!2d28.974155!3f120!4f0!5f0.7820865974627469', this)">🗼 Galata Minorasi</button>
-            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1ZbmVxSjlXdk1fTlY3RzlXZjM4Wms0aklsbjlHQm9SdWZJUnEx!2m2!1d37.913727!2d29.118712!3f45!4f0!5f0.7820865974627469', this)">🏔️ Pamukkale Travertinlari</button>
-            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1pX3NncW5oU1F0aG5YLUprX0hXWkJ1U1lOOW45RWpGZHZzYUtv!2m2!1d41.021111!2d29.004167!3f300!4f0!5f0.7820865974627469', this)">🌉 Istanbul (Kız Kulesi)</button>
+            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1ZbmVxSjlXdk1fTlY3RzlXZjM4Wms0aklsbjlHQm9SdWZJUnEx!2m2!1d37.913727!2d29.118712!3f45!4f0!5f0.7820865974627469', this)">🏔️ Pamukkale</button>
         </div>
 
         <iframe id="panoramaIframe" class="map-frame" src="https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469" allowfullscreen="" loading="lazy"></iframe>
@@ -151,6 +163,45 @@
         </div>
     </div>
 
+    <!-- 5. LISTENING (Eshitib tushunish) BO'LIMI -->
+    <div id="listeningSection" class="section-box listening-section">
+        <h2>🎧 Listening Mashqi</h2>
+        <p style="font-size: 14px; color: #666;">Audioni eshiting va turkcha so'zni yoki iborani to'g'ri yozing:</p>
+        
+        <button class="audio-play-btn" onclick="playListeningAudio()">🔊</button>
+        
+        <div class="listening-input-box">
+            <input type="text" id="listeningAnswer" class="chat-input" placeholder="Eshitgan so'zingizni yozing...">
+            <button class="send-chat-btn" onclick="checkListeningAnswer()">Tekshirish</button>
+        </div>
+        <p id="listeningFeedback" style="margin-top: 12px; font-weight: bold;"></p>
+    </div>
+
+    <!-- 6. TARIX VA MADANIYAT BO'LIMI -->
+    <div id="historySection" class="section-box history-section">
+        <h2>📜 Turkiya Tarixi va Madaniyati</h2>
+        
+        <div class="history-cards">
+            <div class="history-card">
+                <span class="history-tag">Tarix</span>
+                <h3>Usmonli Imperiyasi (Osmanlı İmparatorluğu)</h3>
+                <p>1299-yilda O'g'uz turklari tomonidan asos solingan. 1453-yilda Fatih Sultan Mehmet Istanbulni feth etib, shaharni imperiya poytaxtiga aylantirgan.</p>
+            </div>
+
+            <div class="history-card">
+                <span class="history-tag">Madaniyat</span>
+                <h3>Turk Choyi va Qahvasi</h3>
+                <p>Turkiya dunyoda eng ko'p choy iste'mol qiluvchi mamlakatdir. Turk qahvasi esa YUNESKO Intellektual Madaniy Meros ro'yxatiga kiritilgan.</p>
+            </div>
+
+            <div class="history-card">
+                <span class="history-tag">Arxitektura</span>
+                <h3>Mimar Sinan</h3>
+                <p>Usmonli davrining eng mashhur me'mori. U Edirnedagi Selimiye va Istanbuldagi Suleymaniye masjidlari kabi yuzlab durdona asarlarni barpo etgan.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal (So'z Izohi) -->
     <div id="wordModal" class="modal">
         <div class="modal-content">
@@ -163,8 +214,25 @@
     </div>
 
     <script>
-        let xp = 0;
+        // Xotiradan XP va Darajani yuklab olish (localStorage)
+        let xp = parseInt(localStorage.getItem('turk_app_xp')) || 0;
+        updateUIStats();
+
         let currentWord = '';
+
+        function addXP(amount) {
+            xp += amount;
+            localStorage.setItem('turk_app_xp', xp); // Xotiraga saqlash
+            updateUIStats();
+        }
+
+        function updateUIStats() {
+            document.getElementById('userXp').innerText = xp;
+            let rank = 'Boshlang\'ich (A1)';
+            if (xp >= 30 && xp < 70) rank = 'O\'rta (A2)';
+            else if (xp >= 70) rank = 'Yuqori (B1)';
+            document.getElementById('userRank').innerText = rank;
+        }
 
         function change360(url, btnElement) {
             document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
@@ -172,7 +240,7 @@
             document.getElementById('panoramaIframe').src = url;
         }
 
-        // Testlar
+        // --- TESTLAR LOGIKASI ---
         const questions = [
             { q: '"Kitap" so\'zining o\'zbekcha ma\'nosi nima?', options: ['Daftar', 'Kitob', 'Qalam'], correct: 1, exp: '"Kitap" - Kitob degani.' },
             { q: '"Günaydın" iborasi qachon ishlatiladi?', options: ['Kechasi', 'Tushlikda', 'Ertalab'], correct: 2, exp: '"Günaydın" - Xayrli tong degani.' }
@@ -229,13 +297,12 @@
             recognition = new SpeechRecognition();
             recognition.lang = 'tr-TR';
             recognition.continuous = false;
-            recognition.interimResults = false;
 
             recognition.onresult = function(event) {
                 const text = event.results[0][0].transcript;
                 document.getElementById('userInput').value = text;
                 stopMicUI();
-                sendMessage(); // Avtomatsiz yuboradi
+                sendMessage();
             };
 
             recognition.onerror = function() { stopMicUI(); };
@@ -244,7 +311,7 @@
 
         function toggleSpeech() {
             if (!recognition) {
-                alert("Brauzeringiz ovoz tanishni qo'llab-quvvatlamaydi. Chrome'dan foydalaning.");
+                alert("Brauzeringiz ovoz tanishni qo'llab-quvvatlamaydi.");
                 return;
             }
             if (!isRecording) {
@@ -266,9 +333,7 @@
             micBtn.innerText = "🎙️";
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
 
         function sendMessage() {
             const input = document.getElementById('userInput');
@@ -278,12 +343,11 @@
             appendMessage('user', userText);
             input.value = '';
 
-            // AI Javob qaytaradi va muloqot qiladi
             setTimeout(() => {
                 const aiReply = getAiResponse(userText);
                 appendMessage('ai', `🤖 <b>AI:</b> ${aiReply}`);
                 speakText(aiReply);
-                addXP(5); // Muloqot qilgani uchun XP
+                addXP(5);
             }, 600);
         }
 
@@ -296,55 +360,68 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Oddiy muloqot AI mantiq qoidalari (A1-A2 darajada)
         function getAiResponse(text) {
             const lower = text.toLowerCase();
-            
-            if (lower.includes("merhaba") || lower.includes("selam")) {
-                return "Merhaba! Harika bir gün, değil mi?";
-            } else if (lower.includes("nasılsın") || lower.includes("iyi misin") || lower.includes("nasıl gidiyor")) {
-                return "Ben çok iyiyim, teşekkür ederim! Sen nasılsın?";
-            } else if (lower.includes("ben de iyiyim") || lower.includes("iyiyim")) {
-                return "Harika! Bugün Türkçe ne öğrenmek istersin?";
-            } else if (lower.includes("adın ne") || lower.includes("sen kimsin")) {
-                return "Benim adım Türkçe Asistanı. Sana Türkçe öğretmek için buradayım!";
-            } else if (lower.includes("teşekkür") || lower.includes("sağ ol")) {
-                return "Rica ederim! Her zaman yardımcı olmaya hazırım.";
-            } else if (lower.includes("hoşça kal") || lower.includes("görüşürüz")) {
-                return "Görüşmek üzere! Kendine çok iyi bak!";
-            } else {
-                const randomReplies = [
-                    "Çok güzel söyledin! Başka ne anlatmak istersin?",
-                    "Anladım! Türkçe konuşman her geçen gün gelişiyor.",
-                    "Harika bir cümle! Devam edelim mi?",
-                    "Çok mantıklı! Bugün neler yaptın?"
-                ];
-                return randomReplies[Math.floor(Math.random() * randomReplies.length)];
-            }
+            if (lower.includes("merhaba") || lower.includes("selam")) return "Merhaba! Harika bir gün, değil mi?";
+            if (lower.includes("nasılsın") || lower.includes("iyi misin")) return "Ben çok iyiyim, teşekkür ederim! Sen nasılsın?";
+            if (lower.includes("iyiyim")) return "Harika! Bugün Türkçe ne öğrenmek istersin?";
+            if (lower.includes("teşekkür")) return "Rica ederim! Her zaman yardımcı olmaya hazırım.";
+            return "Çok güzel söyledin! Türkçe konuşman her geçen gün gelişiyor.";
         }
 
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 let utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'tr-TR';
-                utterance.rate = 0.9; // Biroz sekinroq, tushunarli o'qiydi
+                utterance.rate = 0.9;
                 speechSynthesis.speak(utterance);
             }
         }
 
-        function addXP(amount) {
-            xp += amount;
-            document.getElementById('userXp').innerText = xp;
-            if (xp >= 30) document.getElementById('userRank').innerText = 'O\'rta (A2)';
+        // --- LISTENING BO'LIMI LOGIKASI ---
+        const listeningTasks = [
+            { text: "Teşekkür ederim", hint: "Rahmat degani" },
+            { text: "Hoş geldiniz", hint: "Xush kelibsiz degani" },
+            { text: "İyi akşamlar", hint: "Xayrli kech degani" },
+            { text: "Görüşürüz", hint: "Ko'rishguncha degani" }
+        ];
+        let currentListeningIndex = 0;
+
+        function playListeningAudio() {
+            const currentTask = listeningTasks[currentListeningIndex];
+            speakText(currentTask.text);
         }
 
-        // Navigation
+        function checkListeningAnswer() {
+            const userAns = document.getElementById('listeningAnswer').value.trim().toLowerCase();
+            const correctAns = listeningTasks[currentListeningIndex].text.toLowerCase();
+            const feedback = document.getElementById('listeningFeedback');
+
+            if (userAns === correctAns) {
+                feedback.style.color = '#27ae60';
+                feedback.innerText = "🎉 To'g'ri topdingiz! +10 XP";
+                addXP(10);
+                setTimeout(() => {
+                    currentListeningIndex = (currentListeningIndex + 1) % listeningTasks.length;
+                    document.getElementById('listeningAnswer').value = '';
+                    feedback.innerText = '';
+                    playListeningAudio();
+                }, 1500);
+            } else {
+                feedback.style.color = '#e74c3c';
+                feedback.innerText = "❌ Noto'g'ri. Qaytadan eshitib ko'ring!";
+            }
+        }
+
+        // --- NAVIGATION (BO'LIMLARNI ALMASHTIRISH) ---
         function switchTab(tab) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
             document.getElementById('textSection').style.display = 'none';
             document.getElementById('quizSection').style.display = 'none';
             document.getElementById('panoramaSection').style.display = 'none';
             document.getElementById('speakingSection').style.display = 'none';
+            document.getElementById('listeningSection').style.display = 'none';
+            document.getElementById('historySection').style.display = 'none';
 
             if (tab === 'text') {
                 document.getElementById('tab-text').classList.add('active');
@@ -359,6 +436,12 @@
             } else if (tab === 'speaking') {
                 document.getElementById('tab-speaking').classList.add('active');
                 document.getElementById('speakingSection').style.display = 'block';
+            } else if (tab === 'listening') {
+                document.getElementById('tab-listening').classList.add('active');
+                document.getElementById('listeningSection').style.display = 'block';
+            } else if (tab === 'history') {
+                document.getElementById('tab-history').classList.add('active');
+                document.getElementById('historySection').style.display = 'block';
             }
         }
 
@@ -371,13 +454,8 @@
             document.getElementById('wordModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('wordModal').style.display = 'none';
-        }
-
-        function speakWord() {
-            speakText(currentWord);
-        }
+        function closeModal() { document.getElementById('wordModal').style.display = 'none'; }
+        function speakWord() { speakText(currentWord); }
     </script>
 
 </body>
