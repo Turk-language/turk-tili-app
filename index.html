@@ -113,9 +113,9 @@
         <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Rasmni barmoq yoki sichqoncha bilan istalgan tomonga aylantiring:</p>
         
         <div class="location-buttons">
-            <button class="loc-btn active" onclick="load360('istanbul', this)">🌉 Istanbul (Bosfor)</button>
+            <button class="loc-btn active" onclick="load360('istanbul', this)">🌉 Istanbul (Ortaköy)</button>
             <button class="loc-btn" onclick="load360('cappadocia', this)">🎈 Kapadokya</button>
-            <button class="loc-btn" onclick="load360('hagiasophia', this)">🕌 Ayasofya</button>
+            <button class="loc-btn" onclick="load360('hagiasophia', this)">🕌 Ayasofya (Ichki ko'rinish)</button>
         </div>
 
         <div id="panorama-container"></div>
@@ -140,22 +140,19 @@
         let currentWord = '';
         let viewer = null;
 
-        // 360° Panorama Rasm Havolalari
+        // Ishlaydigan 360° Panorama Rasm Havolalari
         const locations = {
-            istanbul: "https://pannellum.org/images/alma.jpg",
-            cappadocia: "https://pannellum.org/images/cerro-toco-0.jpg",
-            hagiasophia: "https://pannellum.org/images/bovey-house.jpg"
+            istanbul: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ortak%C3%B6y_Mosque_360_panorama.jpg/2560px-Ortak%C3%B6y_Mosque_360_panorama.jpg",
+            cappadocia: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cappadocia_Balloon_Panorama.jpg/2560px-Cappadocia_Balloon_Panorama.jpg",
+            hagiasophia: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Hagia_Sophia_interior_360_panorama.jpg/2560px-Hagia_Sophia_interior_360_panorama.jpg"
         };
 
         function load360(locKey, btnElement) {
-            // Tugmalar rangini o'zgartirish
             document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
 
-            // Agar avvalgi 360 oyna mavjud bo'lsa uni tozalaymiz
             document.getElementById('panorama-container').innerHTML = '';
 
-            // Yangi 360 panoramani yuklaymiz
             viewer = pannellum.viewer('panorama-container', {
                 "type": "equirectangular",
                 "panorama": locations[locKey],
