@@ -5,23 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turk Tili Platformasi</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #f4f7f6; color: #333; padding: 20px; text-align: center; }
-        header { background: #e74c3c; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold; }
-        .card:hover { background: #ffe6e6; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; padding: 15px; text-align: center; }
+        
+        header { background: #e74c3c; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2); }
+        h1 { font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { font-size: 14px; opacity: 0.9; }
+
+        /* Bo'limlar menyusi */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 25px; }
+        .card { background: white; padding: 15px 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-weight: 600; font-size: 14px; transition: 0.2s; }
+        .card:hover { background: #ffe6e6; cursor: pointer; transform: translateY(-2px); }
+
+        /* Interaktiv matn bloki */
+        .text-container { background: white; padding: 20px; border-radius: 12px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
+        .text-container h2 { font-size: 18px; color: #e74c3c; margin-bottom: 12px; }
+        .interactive-text { font-size: 18px; line-height: 1.8; }
+        
+        /* Bosiladigan so'zlar stili */
+        .word { display: inline-block; padding: 0 2px; border-bottom: 2px dashed #e74c3c; color: #2c3e50; cursor: pointer; font-weight: 500; transition: 0.2s; }
+        .word:hover { background-color: #ffe6e6; border-radius: 4px; color: #e74c3c; }
+
+        /* Modal (Pop-up) oyna */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; width: 90%; max-width: 380px; padding: 25px; border-radius: 16px; text-align: center; position: relative; animation: popup 0.3s ease; }
+        @keyframes popup { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .close-btn { position: absolute; top: 12px; right: 15px; font-size: 22px; cursor: pointer; color: #777; }
+        .word-title { font-size: 24px; color: #e74c3c; font-weight: bold; margin-bottom: 5px; }
+        .word-translation { font-size: 18px; color: #2c3e50; font-weight: 600; margin-bottom: 10px; }
+        .word-explain { font-size: 14px; color: #666; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+        
+        .audio-btn { background: #27ae60; color: white; border: none; padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .audio-btn:hover { background: #219150; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Turk Tili Ta'lim Platformasi</h1>
-        <p>Barchasi bir joyda: Tarixdan zamonaviylikkacha</p>
+        <h1>Turk Tili Platformasi</h1>
+        <p class="subtitle">Interaktiv matnlar va aqlli lug'at</p>
     </header>
 
-    <h2>Bo'limlar</h2>
-
+    <!-- Bo'limlar -->
     <div class="grid">
         <div class="card">🎧 Listening</div>
         <div class="card">📖 Reading</div>
@@ -32,6 +58,65 @@
         <div class="card">📜 Tarix</div>
         <div class="card">🏛️ 360° Turkiya</div>
     </div>
+
+    <!-- Interaktiv Matn Namunasi -->
+    <div class="text-container">
+        <h2>📖 Mintaqaviy Matn (So'z ustiga bosing):</h2>
+        <p class="interactive-text">
+            <span class="word" onclick="showWord('Merhaba', 'Salom', 'Kundalik ko\'rishganda ishlatiladigan eng asosiy salomlashuv so\'zi.')">Merhaba</span>, 
+            <span class="word" onclick="showWord('bugün', 'bugun', 'Hozirgi sutka / kunni anglatadi.')">bugün</span> 
+            <span class="word" onclick="showWord('Türkçe', 'Turk tili', 'Turkiya va boshqa turkiy xalqlar gapiradigan til.')">Türkçe</span> 
+            <span class="word" onclick="showWord('öğrenmek', 'o\'rganish', 'Fe\'lning noaniq shakli (Infinitive).')">öğrenmek</span> 
+            <span class="word" onclick="showWord('çok', 'juda / ko\'p', 'Sifat va fe\'llar intensivligini oshirish uchun ishlatiladi.')">çok</span> 
+            <span class="word" onclick="showWord('kolay', 'oson', 'Qiyin bo\'lmagan, sodda vaziyat.')">kolay</span>!
+        </p>
+    </div>
+
+    <!-- Modal (So'z Izohi) -->
+    <div id="wordModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modalWord" class="word-title">Merhaba</div>
+            <div id="modalTrans" class="word-translation">Salom</div>
+            <div id="modalExplain" class="word-explain">Izoh bu yerda chiqadi...</div>
+            <button class="audio-btn" onclick="speakWord()">🔊 Talaffuzni eshitish</button>
+        </div>
+    </div>
+
+    <script>
+        let currentWord = '';
+
+        function showWord(word, translation, explanation) {
+            currentWord = word;
+            document.getElementById('modalWord').innerText = word;
+            document.getElementById('modalTrans').innerText = translation;
+            document.getElementById('modalExplain').innerText = explanation;
+            document.getElementById('wordModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('wordModal').style.display = 'none';
+        }
+
+        // Avtomatik Turkcha talaffuz qilish (Web Speech API)
+        function speakWord() {
+            if ('speechSynthesis' in window) {
+                let utterance = new SpeechSynthesisUtterance(currentWord);
+                utterance.lang = 'tr-TR'; // Turk tili
+                speechSynthesis.speak(utterance);
+            } else {
+                alert("Brauzeringiz ovozli funktsiyani qo'llab-quvvatlamaydi.");
+            }
+        }
+
+        // Modaldan tashqariga bosilsa yopish
+        window.onclick = function(event) {
+            let modal = document.getElementById('wordModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 
 </body>
 </html>
