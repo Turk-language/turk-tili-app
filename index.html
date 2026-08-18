@@ -14,9 +14,11 @@
         p.subtitle { font-size: 14px; opacity: 0.9; }
 
         /* XP va Reyting paneli */
-        .user-stats { display: flex; justify-content: space-between; background: #fff; padding: 12px 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); font-weight: bold; color: #2c3e50; }
+        .user-stats { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); font-weight: bold; color: #2c3e50; }
         .xp-badge { color: #f39c12; }
         .rank-badge { color: #2980b9; }
+        .reset-btn { background: none; border: 1px solid #ddd; color: #999; font-size: 11px; padding: 4px 8px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+        .reset-btn:hover { background: #f8d7da; color: #e74c3c; border-color: #e74c3c; }
 
         /* Bo'limlar menyusi */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; margin-bottom: 20px; }
@@ -28,12 +30,14 @@
         .section-box h2 { font-size: 18px; color: #e74c3c; margin-bottom: 12px; }
 
         /* Interaktiv matn */
-        .interactive-text { font-size: 17px; line-height: 1.8; }
+        .interactive-text { font-size: 17px; line-height: 1.8; margin-bottom: 10px; }
         .word { display: inline-block; padding: 0 2px; border-bottom: 2px dashed #e74c3c; color: #2c3e50; cursor: pointer; font-weight: 500; }
         .word:hover { background-color: #ffe6e6; border-radius: 4px; color: #e74c3c; }
+        .text-progress { font-size: 12px; color: #999; margin-top: 10px; }
 
         /* Testlar bo'limi */
         .quiz-container { display: none; text-align: left; }
+        .quiz-progress { font-size: 12px; color: #999; margin-bottom: 8px; font-weight: 600; }
         .quiz-question { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px; }
         .options { display: flex; flex-direction: column; gap: 10px; }
         .option-btn { background: #f8f9fa; border: 2px solid #e9ecef; padding: 12px 15px; border-radius: 8px; font-size: 15px; cursor: pointer; text-align: left; font-weight: 500; }
@@ -48,6 +52,7 @@
         .loc-btn { background: #f0f2f5; border: 1px solid #ddd; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .loc-btn.active { background: #e74c3c; color: white; border-color: #e74c3c; }
         .map-frame { width: 100%; height: 380px; border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .map-fallback { display: none; padding: 30px 15px; text-align: center; background: #f9f9f9; border-radius: 12px; color: #777; font-size: 13px; }
 
         /* AI CHATBOT (Speaking) STYLE */
         .speaking-section { display: none; }
@@ -55,17 +60,22 @@
         .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
         .chat-msg.ai { background: #ffffff; border: 1px solid #e0e0e0; align-self: flex-start; color: #2c3e50; border-bottom-left-radius: 2px; }
         .chat-msg.user { background: #e74c3c; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-msg b { margin-right: 3px; }
         .chat-controls { display: flex; gap: 10px; align-items: center; }
         .chat-input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 25px; outline: none; font-size: 14px; }
         .mic-chat-btn { background: #e74c3c; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .mic-chat-btn.recording { background: #27ae60; animation: pulse 1.2s infinite; }
         .send-chat-btn { background: #2980b9; color: white; border: none; padding: 0 18px; height: 45px; border-radius: 25px; font-weight: bold; cursor: pointer; }
+        .mic-unsupported { font-size: 11px; color: #aaa; margin-top: 6px; text-align: center; }
 
         /* LISTENING SECTION */
         .listening-section { display: none; text-align: center; }
+        .listening-progress { font-size: 12px; color: #999; font-weight: 600; margin-bottom: 4px; }
         .audio-play-btn { background: #27ae60; color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 30px; cursor: pointer; margin: 15px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); transition: 0.2s; }
         .audio-play-btn:hover { transform: scale(1.05); }
+        .listening-hint { font-size: 12px; color: #999; margin-top: -8px; margin-bottom: 8px; }
         .listening-input-box { display: flex; gap: 10px; margin-top: 15px; }
+        .skip-btn { background: none; border: none; color: #999; font-size: 12px; margin-top: 10px; cursor: pointer; text-decoration: underline; }
 
         /* TARIX VA MADANIYAT SECTION */
         .history-section { display: none; }
@@ -97,6 +107,7 @@
     <div class="user-stats">
         <span class="xp-badge">⭐ XP: <span id="userXp">0</span></span>
         <span class="rank-badge">🏆 Daraja: <span id="userRank">Boshlang'ich</span></span>
+        <button class="reset-btn" onclick="resetProgress()">Tozalash</button>
     </div>
 
     <!-- Navigation -->
@@ -112,19 +123,15 @@
     <!-- 1. Interaktiv Matn (Reading) -->
     <div id="textSection" class="section-box">
         <h2>📖 Mintaqaviy Matn</h2>
-        <p class="interactive-text">
-            <span class="word" onclick="showWord('Merhaba', 'Salom', 'Asosiy salomlashuv so\'zi.')">Merhaba</span>, 
-            <span class="word" onclick="showWord('bugün', 'bugun', 'Hozirgi kun.')">bugün</span> 
-            <span class="word" onclick="showWord('Türkiye', 'Turkiya', 'Yevropa va Osiyoda joylashgan mamlakat.')">Türkiye</span> 
-            <span class="word" onclick="showWord('hakkında', 'haqida', 'Mavzu yoki obyektni ko\'rsatuvchi ko\'makchi.')">hakkında</span> 
-            <span class="word" onclick="showWord('öğrenıyoruz', 'o\'rganyapmiz', 'Hozirgi zamon fe\'li (Biz bo\'limi).')">öğreniyoruz</span>!
-        </p>
+        <p class="interactive-text" id="readingText"></p>
+        <div class="text-progress" id="readingProgress"></div>
     </div>
 
     <!-- 2. Testlar -->
     <div id="quizSection" class="section-box quiz-container">
         <h2>📝 Turk Tili Testi</h2>
         <div id="quizBox">
+            <div class="quiz-progress" id="quizProgress"></div>
             <div class="quiz-question" id="quizQuestion">Savol...</div>
             <div class="options" id="quizOptions"></div>
             <div class="explanation" id="quizExplanation"></div>
@@ -137,14 +144,10 @@
         <h2>🏛️ Turkiya 360° Virtual Sayohat</h2>
         <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Google Street View orqali mashhur joylarda aylanib tomosha qiling:</p>
         
-        <div class="location-buttons">
-            <button class="loc-btn active" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469', this)">🕌 Ayasofya</button>
-            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE5uV3N2NENJdlZBSmxmMWpxRmxEclYwbHF5cjhGZFpBcm9GSEd4!2m2!1d38.643056!2d34.828889!3f210!4f10!5f0.7820865974627469', this)">🎈 Kapadokya</button>
-            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1RbnAweEpxWllqN3hIWWZtdnE4NEkyMGF2alhhcld5UmlqTjhP!2m2!1d41.025658!2d28.974155!3f120!4f0!5f0.7820865974627469', this)">🗼 Galata Minorasi</button>
-            <button class="loc-btn" onclick="change360('https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1ZbmVxSjlXdk1fTlY3RzlXZjM4Wms0aklsbjlHQm9SdWZJUnEx!2m2!1d37.913727!2d29.118712!3f45!4f0!5f0.7820865974627469', this)">🏔️ Pamukkale</button>
-        </div>
+        <div class="location-buttons" id="locButtons"></div>
 
-        <iframe id="panoramaIframe" class="map-frame" src="https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469" allowfullscreen="" loading="lazy"></iframe>
+        <iframe id="panoramaIframe" class="map-frame" allowfullscreen="" loading="lazy" onerror="showMapFallback()"></iframe>
+        <div class="map-fallback" id="mapFallback">📍 Bu joy uchun panorama hozircha yuklanmadi. Boshqa manzilni tanlab ko'ring.</div>
     </div>
 
     <!-- 4. AI Speaking (Muloqot Chatbot) -->
@@ -153,28 +156,32 @@
         <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Mikrofonni bosib turkcha gapiring yoki matn yozing:</p>
         
         <div class="chat-box" id="chatBox">
-            <div class="chat-msg ai">🤖 <b>AI:</b> Merhaba! Ben senin Türkçe öğretmeninim. Bugün nasılsın?</div>
+            <div class="chat-msg ai"><b>🤖 AI:</b> Merhaba! Ben senin Türkçe öğretmeninim. Bugün nasılsın?</div>
         </div>
 
         <div class="chat-controls">
             <button class="mic-chat-btn" id="micBtn" onclick="toggleSpeech()">🎙️</button>
-            <input type="text" id="userInput" class="chat-input" placeholder="Turkcha yozing yoki gapiring..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="userInput" class="chat-input" placeholder="Turkcha yozing yoki gapiring..." onkeypress="handleKeyPress(event)" maxlength="200">
             <button class="send-chat-btn" onclick="sendMessage()">Yubor</button>
         </div>
+        <div class="mic-unsupported" id="micUnsupported" style="display:none;">Brauzeringiz ovozli kiritishni qo'llab-quvvatlamaydi — matn kiritishdan foydalaning.</div>
     </div>
 
     <!-- 5. LISTENING (Eshitib tushunish) BO'LIMI -->
     <div id="listeningSection" class="section-box listening-section">
         <h2>🎧 Listening Mashqi</h2>
         <p style="font-size: 14px; color: #666;">Audioni eshiting va turkcha so'zni yoki iborani to'g'ri yozing:</p>
-        
+        <div class="listening-progress" id="listeningProgress"></div>
+
         <button class="audio-play-btn" onclick="playListeningAudio()">🔊</button>
-        
+        <div class="listening-hint" id="listeningHint"></div>
+
         <div class="listening-input-box">
-            <input type="text" id="listeningAnswer" class="chat-input" placeholder="Eshitgan so'zingizni yozing...">
+            <input type="text" id="listeningAnswer" class="chat-input" placeholder="Eshitgan so'zingizni yozing..." onkeypress="if(event.key==='Enter')checkListeningAnswer()">
             <button class="send-chat-btn" onclick="checkListeningAnswer()">Tekshirish</button>
         </div>
         <p id="listeningFeedback" style="margin-top: 12px; font-weight: bold;"></p>
+        <button class="skip-btn" onclick="skipListening()">O'tkazib yuborish ➔</button>
     </div>
 
     <!-- 6. TARIX VA MADANIYAT BO'LIMI -->
@@ -214,7 +221,9 @@
     </div>
 
     <script>
-        // Xotiradan XP va Darajani yuklab olish (localStorage)
+        // ==========================================================
+        // XP / DARAJA
+        // ==========================================================
         let xp = parseInt(localStorage.getItem('turk_app_xp')) || 0;
         updateUIStats();
 
@@ -222,33 +231,113 @@
 
         function addXP(amount) {
             xp += amount;
-            localStorage.setItem('turk_app_xp', xp); // Xotiraga saqlash
+            localStorage.setItem('turk_app_xp', xp);
             updateUIStats();
         }
 
         function updateUIStats() {
             document.getElementById('userXp').innerText = xp;
-            let rank = 'Boshlang\'ich (A1)';
-            if (xp >= 30 && xp < 70) rank = 'O\'rta (A2)';
-            else if (xp >= 70) rank = 'Yuqori (B1)';
+            let rank = "Boshlang'ich (A1)";
+            if (xp >= 30 && xp < 70) rank = "O'rta (A2)";
+            else if (xp >= 70) rank = "Yuqori (B1)";
             document.getElementById('userRank').innerText = rank;
         }
 
-        function change360(url, btnElement) {
-            document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-            document.getElementById('panoramaIframe').src = url;
+        function resetProgress() {
+            if (confirm("Barcha XP va progressni tozalashni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.")) {
+                localStorage.removeItem('turk_app_xp');
+                xp = 0;
+                updateUIStats();
+            }
         }
 
-        // --- TESTLAR LOGIKASI ---
+        // Xavfsiz matn qo'shish uchun yordamchi (XSS oldini olish)
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        // Turkcha diakritik belgilarni lotin harflariga soddalashtirish
+        // (o'zbek klaviaturasida ç/ş/ğ/ı/ö/ü bo'lmasligi mumkin)
+        function normalizeTurkish(str) {
+            return str
+                .toLowerCase()
+                .replace(/ç/g, 'c')
+                .replace(/ğ/g, 'g')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ş/g, 's')
+                .replace(/ü/g, 'u')
+                .replace(/i̇/g, 'i')
+                .trim();
+        }
+
+        // ==========================================================
+        // 1. READING (bir nechta jumlali matn, so'z bosilganda izoh)
+        // ==========================================================
+        const readingSentences = [
+            [
+                { w: 'Merhaba', t: 'Salom', e: "Asosiy salomlashuv so'zi." },
+                { w: 'bugün', t: 'bugun', e: 'Hozirgi kun.', plain: true },
+                { w: 'Türkiye', t: 'Turkiya', e: 'Yevropa va Osiyoda joylashgan mamlakat.' },
+                { w: 'hakkında', t: 'haqida', e: "Mavzu yoki obyektni ko'rsatuvchi ko'makchi." },
+                { w: 'öğreniyoruz', t: "o'rganyapmiz", e: "Hozirgi zamon fe'li (Biz bo'limi)." , suffix: '!' }
+            ],
+            [
+                { w: 'İstanbul', t: 'Istanbul', e: "Turkiyaning eng katta shahri." },
+                { w: 'çok', t: 'juda', e: "Miqdorni kuchaytiruvchi so'z." , plain: true },
+                { w: 'güzel', t: "chiroyli", e: "Sifatlovchi so'z." },
+                { w: 'bir', t: 'bir', e: "Son / noaniq artikl vazifasini bajaradi.", plain: true },
+                { w: 'şehir', t: 'shahar', e: "Aholi yashaydigan katta hudud.", suffix: '.' }
+            ]
+        ];
+        let currentSentenceIndex = 0;
+
+        function renderReading() {
+            const container = document.getElementById('readingText');
+            container.innerHTML = '';
+            const sentence = readingSentences[currentSentenceIndex];
+
+            sentence.forEach((item, idx) => {
+                const span = document.createElement('span');
+                span.className = 'word';
+                span.innerText = item.w;
+                span.onclick = () => showWord(item.w, item.t, item.e);
+                container.appendChild(span);
+
+                const sep = document.createTextNode(
+                    idx < sentence.length - 1 ? ' ' : (item.suffix || '')
+                );
+                container.appendChild(sep);
+            });
+
+            document.getElementById('readingProgress').innerText =
+                `${currentSentenceIndex + 1} / ${readingSentences.length} jumla — boshqasini ko'rish uchun bosing ➔`;
+            document.getElementById('readingProgress').onclick = nextSentence;
+            document.getElementById('readingProgress').style.cursor = 'pointer';
+        }
+
+        function nextSentence() {
+            currentSentenceIndex = (currentSentenceIndex + 1) % readingSentences.length;
+            renderReading();
+        }
+
+        // ==========================================================
+        // 2. TESTLAR
+        // ==========================================================
         const questions = [
             { q: '"Kitap" so\'zining o\'zbekcha ma\'nosi nima?', options: ['Daftar', 'Kitob', 'Qalam'], correct: 1, exp: '"Kitap" - Kitob degani.' },
-            { q: '"Günaydın" iborasi qachon ishlatiladi?', options: ['Kechasi', 'Tushlikda', 'Ertalab'], correct: 2, exp: '"Günaydın" - Xayrli tong degani.' }
+            { q: '"Günaydın" iborasi qachon ishlatiladi?', options: ['Kechasi', 'Tushlikda', 'Ertalab'], correct: 2, exp: '"Günaydın" - Xayrli tong degani.' },
+            { q: '"Teşekkür ederim" nimani anglatadi?', options: ['Rahmat', 'Kechirasiz', 'Xayr'], correct: 0, exp: '"Teşekkür ederim" - Rahmat degani.' },
+            { q: '"Su" so\'zi turkchada nimani bildiradi?', options: ['Non', 'Suv', 'Tuz'], correct: 1, exp: '"Su" - Suv degani.' },
+            { q: '"Görüşürüz" qanday holatda aytiladi?', options: ['Uchrashuvda', 'Xayrlashganda', 'Tabriklaganda'], correct: 1, exp: '"Görüşürüz" - Ko\'rishguncha / xayr degani.' }
         ];
         let currentQIndex = 0;
 
         function showQuestion() {
             const q = questions[currentQIndex];
+            document.getElementById('quizProgress').innerText = `Savol ${currentQIndex + 1} / ${questions.length}`;
             document.getElementById('quizQuestion').innerText = `${currentQIndex + 1}. ${q.q}`;
             const optDiv = document.getElementById('quizOptions');
             optDiv.innerHTML = '';
@@ -271,7 +360,7 @@
 
             if (selectedIdx === q.correct) {
                 btn.classList.add('correct');
-                addXP(10);
+                addXP(10); // Faqat to'g'ri javob uchun XP
             } else {
                 btn.classList.add('wrong');
                 allBtns[q.correct].classList.add('correct');
@@ -288,7 +377,45 @@
             showQuestion();
         }
 
-        // --- AI SPEAKING CHATBOT LOGIKA ---
+        // ==========================================================
+        // 3. 360° PANORAMA
+        // ==========================================================
+        const locations = [
+            { name: '🕌 Ayasofya', url: 'https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1aVjhXOTJtTHUzcUZvWnpqVFRvSEpBQXlUWVZaUXZpQ2NldEpt!2m2!1d41.008583!2d28.980175!3f180!4f0!5f0.7820865974627469' },
+            { name: '🎈 Kapadokya', url: 'https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE5uV3N2NENJdlZBSmxmMWpxRmxEclYwbHF5cjhGZFpBcm9GSEd4!2m2!1d38.643056!2d34.828889!3f210!4f10!5f0.7820865974627469' },
+            { name: '🗼 Galata Minorasi', url: 'https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1RbnAweEpxWllqN3hIWWZtdnE4NEkyMGF2alhhcld5UmlqTjhP!2m2!1d41.025658!2d28.974155!3f120!4f0!5f0.7820865974627469' },
+            { name: '🏔️ Pamukkale', url: 'https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1ZbmVxSjlXdk1fTlY3RzlXZjM4Wms0aklsbjlHQm9SdWZJUnEx!2m2!1d37.913727!2d29.118712!3f45!4f0!5f0.7820865974627469' }
+        ];
+
+        function renderLocButtons() {
+            const wrap = document.getElementById('locButtons');
+            wrap.innerHTML = '';
+            locations.forEach((loc, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'loc-btn' + (idx === 0 ? ' active' : '');
+                btn.innerText = loc.name;
+                btn.onclick = () => change360(loc.url, btn);
+                wrap.appendChild(btn);
+            });
+        }
+
+        function change360(url, btnElement) {
+            document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+            const iframe = document.getElementById('panoramaIframe');
+            document.getElementById('mapFallback').style.display = 'none';
+            iframe.style.display = 'block';
+            iframe.src = url;
+        }
+
+        function showMapFallback() {
+            document.getElementById('panoramaIframe').style.display = 'none';
+            document.getElementById('mapFallback').style.display = 'block';
+        }
+
+        // ==========================================================
+        // 4. AI SPEAKING CHATBOT
+        // ==========================================================
         let recognition = null;
         let isRecording = false;
 
@@ -307,6 +434,12 @@
 
             recognition.onerror = function() { stopMicUI(); };
             recognition.onend = function() { stopMicUI(); };
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('micBtn').disabled = true;
+                document.getElementById('micBtn').style.opacity = '0.4';
+                document.getElementById('micUnsupported').style.display = 'block';
+            });
         }
 
         function toggleSpeech() {
@@ -335,37 +468,45 @@
 
         function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
 
+        // XP faqat "haqiqiy" muloqot uchun (juda qisqa / mazmunsiz xabarlar uchun berilmaydi)
+        let messagesSinceXP = 0;
+
         function sendMessage() {
             const input = document.getElementById('userInput');
             const userText = input.value.trim();
             if (!userText) return;
 
-            appendMessage('user', userText);
+            appendMessage('user', escapeHtml(userText));
             input.value = '';
 
             setTimeout(() => {
                 const aiReply = getAiResponse(userText);
-                appendMessage('ai', `🤖 <b>AI:</b> ${aiReply}`);
+                appendMessage('ai', `<b>🤖 AI:</b> ${escapeHtml(aiReply)}`);
                 speakText(aiReply);
-                addXP(5);
+
+                // Faqat 2+ so'zdan iborat xabarlar uchun va har 2-xabarda XP
+                if (userText.split(/\s+/).length >= 2) {
+                    messagesSinceXP++;
+                    if (messagesSinceXP % 2 === 0) addXP(5);
+                }
             }, 600);
         }
 
-        function appendMessage(sender, text) {
+        function appendMessage(sender, safeHtml) {
             const chatBox = document.getElementById('chatBox');
             const msgDiv = document.createElement('div');
             msgDiv.className = `chat-msg ${sender}`;
-            msgDiv.innerHTML = text;
+            msgDiv.innerHTML = safeHtml; // safeHtml allaqachon escapeHtml() dan o'tgan yoki ishonchli shablon
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function getAiResponse(text) {
-            const lower = text.toLowerCase();
+            const lower = normalizeTurkish(text);
             if (lower.includes("merhaba") || lower.includes("selam")) return "Merhaba! Harika bir gün, değil mi?";
-            if (lower.includes("nasılsın") || lower.includes("iyi misin")) return "Ben çok iyiyim, teşekkür ederim! Sen nasılsın?";
+            if (lower.includes("nasilsin") || lower.includes("iyi misin")) return "Ben çok iyiyim, teşekkür ederim! Sen nasılsın?";
             if (lower.includes("iyiyim")) return "Harika! Bugün Türkçe ne öğrenmek istersin?";
-            if (lower.includes("teşekkür")) return "Rica ederim! Her zaman yardımcı olmaya hazırım.";
+            if (lower.includes("tesekkur")) return "Rica ederim! Her zaman yardımcı olmaya hazırım.";
             return "Çok güzel söyledin! Türkçe konuşman her geçen gün gelişiyor.";
         }
 
@@ -378,14 +519,25 @@
             }
         }
 
-        // --- LISTENING BO'LIMI LOGIKASI ---
+        // ==========================================================
+        // 5. LISTENING
+        // ==========================================================
         const listeningTasks = [
             { text: "Teşekkür ederim", hint: "Rahmat degani" },
             { text: "Hoş geldiniz", hint: "Xush kelibsiz degani" },
             { text: "İyi akşamlar", hint: "Xayrli kech degani" },
-            { text: "Görüşürüz", hint: "Ko'rishguncha degani" }
+            { text: "Görüşürüz", hint: "Ko'rishguncha degani" },
+            { text: "Günaydın", hint: "Xayrli tong degani" },
+            { text: "Afiyet olsun", hint: "Yoqimli ishtaha degani" }
         ];
         let currentListeningIndex = 0;
+        let listeningAttempts = 0;
+
+        function renderListeningProgress() {
+            document.getElementById('listeningProgress').innerText =
+                `${currentListeningIndex + 1} / ${listeningTasks.length}`;
+            document.getElementById('listeningHint').innerText = '';
+        }
 
         function playListeningAudio() {
             const currentTask = listeningTasks[currentListeningIndex];
@@ -393,27 +545,46 @@
         }
 
         function checkListeningAnswer() {
-            const userAns = document.getElementById('listeningAnswer').value.trim().toLowerCase();
-            const correctAns = listeningTasks[currentListeningIndex].text.toLowerCase();
+            const rawInput = document.getElementById('listeningAnswer').value.trim();
+            const userAns = normalizeTurkish(rawInput);
+            const correctAns = normalizeTurkish(listeningTasks[currentListeningIndex].text);
             const feedback = document.getElementById('listeningFeedback');
 
             if (userAns === correctAns) {
                 feedback.style.color = '#27ae60';
                 feedback.innerText = "🎉 To'g'ri topdingiz! +10 XP";
                 addXP(10);
+                listeningAttempts = 0;
                 setTimeout(() => {
                     currentListeningIndex = (currentListeningIndex + 1) % listeningTasks.length;
                     document.getElementById('listeningAnswer').value = '';
                     feedback.innerText = '';
+                    renderListeningProgress();
                     playListeningAudio();
                 }, 1500);
             } else {
+                listeningAttempts++;
                 feedback.style.color = '#e74c3c';
                 feedback.innerText = "❌ Noto'g'ri. Qaytadan eshitib ko'ring!";
+                // 2 marta xato qilinsa, tarjima ko'rinishi (yordam sifatida)
+                if (listeningAttempts >= 2) {
+                    document.getElementById('listeningHint').innerText =
+                        `💡 Maslahat: ${listeningTasks[currentListeningIndex].hint}`;
+                }
             }
         }
 
-        // --- NAVIGATION (BO'LIMLARNI ALMASHTIRISH) ---
+        function skipListening() {
+            currentListeningIndex = (currentListeningIndex + 1) % listeningTasks.length;
+            listeningAttempts = 0;
+            document.getElementById('listeningAnswer').value = '';
+            document.getElementById('listeningFeedback').innerText = '';
+            renderListeningProgress();
+        }
+
+        // ==========================================================
+        // NAVIGATSIYA
+        // ==========================================================
         function switchTab(tab) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
             document.getElementById('textSection').style.display = 'none';
@@ -433,12 +604,14 @@
             } else if (tab === '360') {
                 document.getElementById('tab-360').classList.add('active');
                 document.getElementById('panoramaSection').style.display = 'block';
+                change360(locations[0].url, document.querySelector('.loc-btn'));
             } else if (tab === 'speaking') {
                 document.getElementById('tab-speaking').classList.add('active');
                 document.getElementById('speakingSection').style.display = 'block';
             } else if (tab === 'listening') {
                 document.getElementById('tab-listening').classList.add('active');
                 document.getElementById('listeningSection').style.display = 'block';
+                renderListeningProgress();
             } else if (tab === 'history') {
                 document.getElementById('tab-history').classList.add('active');
                 document.getElementById('historySection').style.display = 'block';
@@ -456,6 +629,12 @@
 
         function closeModal() { document.getElementById('wordModal').style.display = 'none'; }
         function speakWord() { speakText(currentWord); }
+
+        // ==========================================================
+        // INIT
+        // ==========================================================
+        renderReading();
+        renderLocButtons();
     </script>
 
 </body>
